@@ -9,7 +9,7 @@ public class Person {
 	
 	public Person() {}
 	
-	public Person(String_name, int_age)
+	public Person(String _name, int _age)
 	{
 		name = _name;
 		age = _age;
