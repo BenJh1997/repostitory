@@ -15,12 +15,51 @@ public class MeasureImageQuality {
 	
 		ImageFileHandler img_handler = new ImageFileHandler();
 		
-		BufferedImage org_image = img_handler.readFile("H:\\image\\house_org.jpg");
-		BufferedImage compressed_image = img_handler.readFile("H:\\image\\house_org_compressed.jpg");
+		BufferedImage org_image = img_handler.readFile("H:\\images\\house_org.jpg");
+		BufferedImage compressed_image = img_handler.readFile("H:\\images\\house_org_compressed.jpg");
+		
+		MeasureImageQuality imgQuality = new MeasureImageQuality();
+		
+		imgQuality.displayImage(org_image, "original");
+		imgQuality.displayImage(compressed_image, "compressed");
+		
+		
+		double squared_sum = 0;
+		for(int y = 0; y < org_image.getHeight(); y++) {
+			for(int x = 0; x < org_image.getWidth(); x++) {
+				
+				int rgbvalue_org = org_image.getRGB(x, y);
+				
+				int alpha = (rgbvalue_org >> 24) & 0xff;
+				int red = (rgbvalue_org >> 16) & 0xff;
+				int green = (rgbvalue_org >> 8) & 0xff;
+				int blue = (rgbvalue_org) & 0xff;
+				
+				
+				int grayscale_org = (int) ((0.3 *red) + (0.59 * green) + (0.11 * blue));
+				
+				
+				int rgbvalue_compressed = compressed_image.getRGB(x, y);
+				
+				alpha = (rgbvalue_compressed >> 24) & 0xff;
+				red = (rgbvalue_compressed >> 16) & 0xff;
+				green = (rgbvalue_compressed >> 8) & 0xff;
+				blue = (rgbvalue_compressed) & 0xff;
+				
+				int grayscale_compressed = (int) ((0.3 *red) + (0.59 * green) + (0.11 * blue));
+				
+				squared_sum += (Math.pow((grayscale_org - grayscale_compressed), 2));
+			}
+		}
+		
+		double mean_squared_error = squared_sum / (org_image.getHeight() * org_image.getWidth());
+		double PSNR = 10 * Math.log10(Math.pow(255, 2) / mean_squared_error);
+		
+		System.out.printf("Computed PSNR: %.2f dB", PSNR);
 	}
 	
 	
-	public void displayImage(BufferedImage img) {
+	public void displayImage(BufferedImage img, String title) {
 		//displaying an image
 		
 		BufferedImage rescaledImage = resize(img, img.getWidth()/4, img.getHeight()/4);
@@ -29,9 +68,12 @@ public class MeasureImageQuality {
 		JPanel jPanel = new JPanel();
 		jPanel.add(picLabel);
 		
-		JFrame frame = new JFrame();
+		JFrame frame = new JFrame(title);
 		frame.setSize(new Dimension(rescaledImage.getWidth(),
 				rescaledImage.getHeight()));
+		frame.setVisible(true);
+				
+		
 	}
 	public static BufferedImage resize(BufferedImage img, int newW, int newH) {
 		
@@ -45,32 +87,8 @@ public class MeasureImageQuality {
 		return dimg;
 	}
 	
-//	//for(int y = 0; y < org_image.getHeight(); y++) {
-//		for(int x = 0; x < org_image.getWidth(); x++) {
-//			
-//			int rgbvalue_org = org_image.getRGB(x, y);
-//			
-//			int alpha = (rgbvalue_org >> 24) & 0xff;
-//			int red = (rgbvalue_org >> 16) & 0xff;
-//			int green = (rgbvalue_org >> 8) & 0xff;
-//			int blue = (rgbvalue_org) & 0xff;
-//			
-//			
-//			int grayscale_org = (int) ((0.3 *red) + (0.59 * green) + (0.11 * blue));
-//			
-//			
-//			int rgbvalue_compressed = compressed_image.getRGB(x, y);
-//			
-//			alpha = (rgbvalue_compressed >> 24) & 0xff;
-//			red = (rgbvalue_compressed >> 16) & 0xff;
-//			green = (rgbvalue_compressed >> 8) & 0xff;
-//			blue = (rgbvalue_compressed) & 0xff;
-//			
-//			int grayscale_compressed = (int) ((0.3 *red) + (0.59 * green) + (0.11 * blue));
-//			
-//			squared_sum += (Math.pow((grayscale_org - grayscale_compressed), 2));
-//		}
-	}
+	
+}
 	
 	
 	
