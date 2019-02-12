@@ -1,11 +1,9 @@
 package helloworld;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public abstract class FileHandler {
-	
 
 	File fp;
 	String source_name;
@@ -14,13 +12,11 @@ public abstract class FileHandler {
 	int is_directory;
 	String file_type;
 	
-	// constructors
 	public FileHandler() {}
 	public FileHandler(String source_name) {
-		
+		// TODO Auto-generated constructor stub
 		this.source_name = source_name;
 		this.fp = new File(this.source_name);
-		
 	}
 	public FileHandler(String source_file, String destination_file) {
 		this.source_name = source_file;
@@ -28,8 +24,14 @@ public abstract class FileHandler {
 		this.fp = new File(this.source_name);
 	}
 	
+	
 	public abstract void readFile() throws IOException;
 	public abstract void writeFile(String file_name) throws IOException;
+
+	
+	/*
+	 * Introduce getters and setters methods for the class variables
+	 */
 	
 	public File getFp() {
 		return fp;
@@ -67,7 +69,7 @@ public abstract class FileHandler {
 	public void setFile_type(String file_type) {
 		this.file_type = file_type;
 	}
-	
-	
 
+	
+	
 }
